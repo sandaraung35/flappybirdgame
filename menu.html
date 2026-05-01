@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Level</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="menu-bg">
+  <nav class="navbar">
+  <div class="nav-left">FlappyBird</div>
+
+  <!-- Navigation buttons -->
+    <div class="nav-right">
+
+      <button onclick="gogame()">Game</button>
+      <button onclick="gosetting()">Setting</button>
+      <button onclick="gohowtoplay()">How to play</button>
+      <button onclick="toggleHighscore()">Highscore</button>
+
+    </div>
+    </nav>
+
+<!-- Highscore Modal -->
+<div id="highscoreModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Top 10 High Scores</h2>
+     <!-- Dynamic score list -->
+    <div id="highscoreList"></div> 
+     <!-- Close button -->
+    <button onclick="toggleHighscore()">Close</button>
+  </div>
+</div>
+
+  <div class="menu-wrapper">
+
+    <h1 class="menu-title">Select Level</h1>
+
+    <div id="levelsContainer" class="level-grid"></div>
+
+    <button id="backBtn" class="backBtn">Back</button>
+
+  </div>
+
+  <script src="menu.js"></script>
+  <script>
+// NAVIGATION
+    function gogame() {
+      window.location.href = "index.html";
+    }
+      function gosetting() {
+  window.location.href = "select-bird.html";
+}
+    function gohowtoplay() {
+      window.location.href = "howtoplay.html";
+    }
+
+// HIGHSCORE MODAL
+function toggleHighscore() {
+  const modal = document.getElementById("highscoreModal");
+  modal.classList.toggle("hidden");
+  loadHighscores();
+}
+// LOAD HIGHSCORES
+function loadHighscores() {
+  const container = document.getElementById("highscoreList");
+  container.innerHTML = "";
+  // Get unlocked level (default = 1)
+  const unlockedLevel =
+    parseInt(localStorage.getItem("unlockedLevel")) || 1;
+    // Loop throgh levels
+  for (let level = 1; level <= unlockedLevel; level++) {
+    let scores =
+      JSON.parse(localStorage.getItem("level" + level + "Scores")) || [];
+    // Sort highest score first
+    scores.sort((a, b) => b.score - a.score);
+    // Keep top 2 scores only
+    scores = scores.slice(0, 2);
+    // level title
+    const levelTitle = document.createElement("h3");
+    levelTitle.textContent = "Level " + level;
+    container.appendChild(levelTitle);
+    // If no score
+    if (scores.length === 0) {
+      const noScore = document.createElement("p");
+      noScore.textContent = "No scores yet";
+      container.appendChild(noScore);
+      continue;
+    }
+   // Display scores
+    scores.forEach((entry, index) => {
+      const p = document.createElement("p");
+
+      p.textContent =
+        index === 0
+          ? `🥇 ${entry.name} - ${entry.score}`
+          : `🥈 ${entry.name} - ${entry.score}`;
+
+      container.appendChild(p);
+    });
+  }
+}
+</script>
+
+</body>
+</html>

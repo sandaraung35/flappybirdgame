@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Bird - Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ <!-- Pause button (hidden by default) -->
+  <button id="pauseBtn" style="
+    position:absolute;
+    top:20px;
+    right:20px;
+    z-index:20;
+    display:none;">
+    
+  </button>
+ <!-- Game canvas where the Flappy Bird game is drawn -->
+  <canvas id="gameCanvas"></canvas>
+
+  <script>
+     // Get selected level from localStorage (default is 1 if not found)
+    let selectedLevel = localStorage.getItem("selectedLevel") || 1;
+      // Convert string value to integer
+    selectedLevel = parseInt(selectedLevel);
+      // Store selected level globally so main.js can use it
+
+    window.currentLevel = selectedLevel;
+  </script>
+<!-- Main JavaScript file containing game logic -->
+  <script src="main.js"></script>
+
+</body>
+</html>

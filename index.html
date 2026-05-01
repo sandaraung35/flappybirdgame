@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Bird</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body class="intro-bg">
+    <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <!-- Left logo/title -->
+  <div class="nav-left">FlappyBird</div>
+
+  <div class="nav-right">
+     <!-- Go to game page -->
+      <button onclick="gogame()">Game</button>
+
+      <!-- Go to settings page -->
+      <button onclick="gosetting()">Setting</button>
+
+      <!-- Go to how to play page -->
+      <button onclick="gohowtoplay()">How to play</button>
+
+      <!-- Open highscore modal -->
+      <button onclick="toggleHighscore()">Highscore</button>
+
+    </div>
+  </nav>
+
+ <!-- ================= HIGHSCORE MODAL ================= -->
+<div id="highscoreModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Top 10 High Scores</h2>
+      <!-- Highscore list will be generated here -->
+    <div id="highscoreList"></div>
+    <button onclick="toggleHighscore()">Close</button>
+  </div>
+</div>
+ <!-- ================= INTRO SCREEN ================= -->
+  <div class="intro-container">
+    <h1 class="game-title">GET READY!</h1>
+
+  <!-- Player name input -->
+    <input type="text" id="playerName" placeholder="Enter your name">
+  <!-- Start button -->
+    <button id="startBtn" class="primary-btn">Start</button>
+  </div>
+
+  <script>
+     <!-- ================= START BUTTON LOGIC ================= -->
+    document.getElementById("startBtn").addEventListener("click", () => {
+      // Get player name from input
+      const name = document.getElementById("playerName").value.trim();
+       // Validate input
+      if(name === ""){
+        alert("Please enter your name!");
+        return;
+      }
+      // Save name in localStorage
+      localStorage.setItem("playerName", name);
+       // Go to bird selection page
+      window.location.href = "select-bird.html";
+    });
+    //Navigation functions
+        function gogame() {
+  window.location.href = "index.html";
+}
+    function gosetting() {
+  window.location.href = "select-bird.html";
+}
+   function gohowtoplay() {
+      window.location.href = "howtoplay.html";
+    }
+// Highscore Toggle
+function toggleHighscore() {
+  const modal = document.getElementById("highscoreModal");
+  modal.classList.toggle("hidden");
+  loadHighscores();
+}
+// Load highscores
+function loadHighscores() {
+  const container = document.getElementById("highscoreList");
+  container.innerHTML = "";
+//Get unlocked level (default = 1)
+  const unlockedLevel =
+    parseInt(localStorage.getItem("unlockedLevel")) || 1;
+// Loop through levels
+  for (let level = 1; level <= unlockedLevel; level++) {
+// Get scores for each level
+    let scores =
+      JSON.parse(localStorage.getItem("level" + level + "Scores")) || [];
+// Sort highest score first
+    scores.sort((a, b) => b.score - a.score);
+
+//Keep only top 2 scores
+    scores = scores.slice(0, 2);
+
+// Level title
+    const levelTitle = document.createElement("h3");
+    levelTitle.textContent = "Level " + level;
+    container.appendChild(levelTitle);
+
+// If no scores
+    if (scores.length === 0) {
+      const noScore = document.createElement("p");
+      noScore.textContent = "No scores yet";
+      container.appendChild(noScore);
+      continue;
+    }
+// Display scores
+    scores.forEach((entry, index) => {
+      const p = document.createElement("p");
+
+      p.textContent =
+        index === 0
+          ? `🥇 ${entry.name} - ${entry.score}`
+          : `🥈 ${entry.name} - ${entry.score}`;
+
+      container.appendChild(p);
+    });
+  }
+}
+  </script>
+
+</body>
+</html>

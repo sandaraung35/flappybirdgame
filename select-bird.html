@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Bird</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="select-bg">
+    <!-- ===== NAVIGATION BAR ===== -->
+
+  <nav class="navbar">
+  <div class="nav-left">FlappyBird</div>
+
+   <div class="nav-right">
+
+      <button onclick="gogame()">Game</button>
+      <button onclick="gosetting()">Setting</button>
+      <button onclick="gohowtoplay()">How to play</button>
+      <button onclick="toggleHighscore()">Highscore</button>
+
+    </div>
+</nav>
+
+<!-- Highscore Modal -->
+<div id="highscoreModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Top 10 High Scores</h2>
+    <div id="highscoreList"></div>
+    <button onclick="toggleHighscore()">Close</button>
+  </div>
+</div>
+<!-- ================= BIRD SELECTION ================= -->
+  <div class="select-container">
+    <h2>Choose your Flappy Bird!</h2>
+  <!-- Bird selection grid -->
+    <div class="bird-grid">
+   <!-- Bird 1 -->
+      <div class="bird-card">
+  <img src="./assets/bird1.png" alt="Bird 1">
+  <button class="sBtn" onclick="selectBird('bird1.png')">Pick Me</button>
+</div>
+    <!-- Bird 2 -->
+<div class="bird-card">
+  <img src="./assets/bird2.png" alt="Bird 2">
+  <button class="sBtn" onclick="selectBird('bird2.png')">Pick Me</button>
+</div>
+      <!-- Bird 3 -->
+<div class="bird-card">
+  <img src="./assets/bird3.png" alt="Bird 3">
+  <button class="sBtn" onclick="selectBird('bird3.png')">Pick Me</button>
+</div>
+       <!-- Bird 4 -->
+<div class="bird-card">
+  <img src="./assets/bird4.png" alt="Bird 4">
+  <button class="sBtn" onclick="selectBird('bird4.png')">Pick Me</button>
+</div>
+      <!-- Bird 5 -->
+<div class="bird-card">
+  <img src="./assets/bird5.png" alt="Bird 5">
+  <button class="sBtn" onclick="selectBird('bird5.png')">Pick Me</button>
+</div>
+  
+<div class="bird-card">
+  <img src="./assets/bird6.png" alt="Bird 6">
+  <button class="sBtn" onclick="selectBird('bird6.png')">Pick Me</button>
+</div>
+    </div>
+  </div>
+
+  <script>
+      // ===== SELECT BIRD FUNCTION =====
+    function selectBird(birdFile){
+      localStorage.setItem("selectedBird", birdFile);
+      window.location.href = "menu.html";
+    }
+
+    // ===== NAVIGATION FUNCTIONS =====
+function gogame() {
+  window.location.href = "index.html";
+}
+function gosetting() {
+  window.location.href = "select-bird.html";
+}
+
+function gohowtoplay() {
+  window.location.href = "howtoplay.html";
+}
+
+function toggleHighscore() {
+  const modal = document.getElementById("highscoreModal");
+  modal.classList.toggle("hidden");
+  loadHighscores();
+}
+
+    // ===== LOAD HIGHSCORES FUNCTION =====
+function loadHighscores() {
+     // Container to display scores
+  const container = document.getElementById("highscoreList");
+   // Clear previous content
+  container.innerHTML = "";
+
+      // Get unlocked level from localStorage
+  const unlockedLevel =
+    parseInt(localStorage.getItem("unlockedLevel")) || 1;
+  // Loop through each level
+  for (let level = 1; level <= unlockedLevel; level++) {
+    // Get scores for each level
+    let scores =
+      JSON.parse(localStorage.getItem("level" + level + "Scores")) || [];
+ // Sort scores descending (highest first)
+    scores.sort((a, b) => b.score - a.score);
+   // Take top 2 scores only
+    scores = scores.slice(0, 2);
+// Create level title
+    const levelTitle = document.createElement("h3");
+    levelTitle.textContent = "Level " + level;
+    container.appendChild(levelTitle);
+  // If no scores
+    if (scores.length === 0) {
+      const noScore = document.createElement("p");
+      noScore.textContent = "No scores yet";
+      container.appendChild(noScore);
+      continue;
+    }
+  // Display scores
+    scores.forEach((entry, index) => {
+      const p = document.createElement("p");
+
+      p.textContent =
+        index === 0
+          ? `🥇 ${entry.name} - ${entry.score}`
+          : `🥈 ${entry.name} - ${entry.score}`;
+
+      container.appendChild(p);
+    });
+  }
+}
+  </script>
+
+</body>
+</html>
